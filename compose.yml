@@ -20,3 +20,7 @@ services:
 
     restart: always
     stop_grace_period: 2m
+
+    labels:
+      traefik.http.services.https-0-ylhchwpnkhnyxwzo4rs6bdho-pbs-f135.loadbalancer.server.scheme: "https"
+      traefik.http.services.https-0-ylhchwpnkhnyxwzo4rs6bdho-pbs-f135.loadbalancer.serverstransport: "pbs-transport@file"
