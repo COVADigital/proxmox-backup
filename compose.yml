@@ -18,28 +18,29 @@ services:
       - ${PBS_DATA_PATH:-./data}:/var/lib/proxmox-backup
       - ${PBS_DATASTORE_PATH:-./datastore}:/backups
 
+    networks:
+      - coolify
+
     labels:
-      - "traefik.enable=true"
+      traefik.enable: "true"
+      traefik.docker.network: "coolify"
 
       # HTTPS router
-      - "traefik.http.routers.pbs-secure.rule=Host(`${PBS_DOMAIN:?PBS_DOMAIN is required}`)"
-      - "traefik.http.routers.pbs-secure.entrypoints=https"
-      - "traefik.http.routers.pbs-secure.tls=true"
-      - "traefik.http.routers.pbs-secure.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.pbs-secure.service=pbs-backend"
+      traefik.http.routers.pbs-secure.rule: "Host(`${PBS_DOMAIN}`)"
+      traefik.http.routers.pbs-secure.entrypoints: "https"
+      traefik.http.routers.pbs-secure.tls: "true"
+      traefik.http.routers.pbs-secure.tls.certresolver: "letsencrypt"
+      traefik.http.routers.pbs-secure.service: "pbs-backend"
 
-      # HTTP to HTTPS redirect
-      - "traefik.http.routers.pbs-http.rule=Host(`${PBS_DOMAIN:?PBS_DOMAIN is required}`)"
-      - "traefik.http.routers.pbs-http.entrypoints=http"
-      - "traefik.http.routers.pbs-http.middlewares=pbs-redirect"
-      - "traefik.http.routers.pbs-http.service=pbs-backend"
-      - "traefik.http.middlewares.pbs-redirect.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.pbs-redirect.redirectscheme.permanent=true"
-
-      # Native PBS HTTPS backend
-      - "traefik.http.services.pbs-backend.loadbalancer.server.port=8007"
-      - "traefik.http.services.pbs-backend.loadbalancer.server.scheme=https"
-      - "traefik.http.services.pbs-backend.loadbalancer.serverstransport=pbs-transport@file"
+      # Native HTTPS backend
+      traefik.http.services.pbs-backend.loadbalancer.server.port: "8007"
+      traefik.http.services.pbs-backend.loadbalancer.server.scheme: "https"
+      traefik.http.services.pbs-backend.loadbalancer.serverstransport: "pbs-transport@file"
 
     restart: always
     stop_grace_period: 2m
+
+networks:
+  coolify:
+    external: true
+    name: coolify
