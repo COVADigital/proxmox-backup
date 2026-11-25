@@ -1,17 +1,22 @@
 services:
   pbs:
-    hostname: pbs
-    container_name: pbs
-    image: dockurr/proxmox-backup
+    hostname: ${PBS_HOSTNAME:-pbs}
+    image: ${PBS_IMAGE:-dockurr/proxmox-backup}
+
     environment:
-      TZ: "UTC"
-      PASSWORD: "root"
+      TZ: ${PBS_TIMEZONE:-UTC}
+      PASSWORD: ${PBS_ROOT_PASSWORD:?PBS_ROOT_PASSWORD is required}
+
     ports:
-      - 8007:8007
+      - "${PBS_BIND_IP:-127.0.0.1}:${PBS_PORT:-8007}:8007"
+
     tmpfs:
       - /run
+
     volumes:
-      - ./config:/etc/proxmox-backup
-      - ./data:/var/lib/proxmox-backup
+      - ${PBS_CONFIG_PATH:-./config}:/etc/proxmox-backup
+      - ${PBS_DATA_PATH:-./data}:/var/lib/proxmox-backup
+      - ${PBS_DATASTORE_PATH:-./datastore}:/backups
+
     restart: always
     stop_grace_period: 2m
