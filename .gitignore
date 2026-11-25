@@ -1,1 +1,21 @@
 
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Persistent application storage
+/config/
+/data/
+/datastore/
+
+# Private keys and certificates
+*.key
+*.pem
+*.p12
+*.pfx
+
+# Temporary files
+*.log
+*.tmp
+*.bak
