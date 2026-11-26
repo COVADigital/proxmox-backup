@@ -28,7 +28,7 @@ services:
           create_host_path: false
 
       - type: bind
-        source: ${PBS_DATASTORE_PATH:-/srv/proxmox-backup/datastore}
+        source: /srv/proxmox-backup/datastore/pbs-storage
         target: /backups
         bind:
           create_host_path: false
