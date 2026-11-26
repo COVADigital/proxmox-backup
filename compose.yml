@@ -1,7 +1,8 @@
+
 services:
   pbs:
     hostname: ${PBS_HOSTNAME:-pbs}
-    image: ${PBS_IMAGE:-dockurr/proxmox-backup}
+    image: "${PBS_IMAGE:-dockurr/proxmox-backup@sha256:fad1684971be96ba1600bf07e776a670ae80a76b2c99a6d396c167bb4de2444d}"
 
     environment:
       TZ: ${PBS_TIMEZONE:-UTC}
@@ -14,9 +15,23 @@ services:
       - /run
 
     volumes:
-      - ${PBS_CONFIG_PATH:-./config}:/etc/proxmox-backup
-      - ${PBS_DATA_PATH:-./data}:/var/lib/proxmox-backup
-      - ${PBS_DATASTORE_PATH:-./datastore}:/backups
+      - type: bind
+        source: ${PBS_CONFIG_PATH:-/srv/proxmox-backup/config}
+        target: /etc/proxmox-backup
+        bind:
+          create_host_path: false
+
+      - type: bind
+        source: ${PBS_DATA_PATH:-/srv/proxmox-backup/data}
+        target: /var/lib/proxmox-backup
+        bind:
+          create_host_path: false
+
+      - type: bind
+        source: ${PBS_DATASTORE_PATH:-/srv/proxmox-backup/datastore}
+        target: /backups
+        bind:
+          create_host_path: false
 
     restart: always
     stop_grace_period: 2m
