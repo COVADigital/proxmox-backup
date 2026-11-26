@@ -24,4 +24,4 @@ services:
     labels:
       traefik.http.services.https-0-ylhchwpnkhnyxwzo4rs6bdho-pbs-f135.loadbalancer.server.scheme: "https"
       traefik.http.services.https-0-ylhchwpnkhnyxwzo4rs6bdho-pbs-f135.loadbalancer.serverstransport: "pbs-transport@file"
-      traefik.http.routers.https-0-ylhchwpnkhnyxwzo4rs6bdho-pbs-f135.middlewares: "homelab-pbs-allowlist@file,gzip-sse@docker"
+      coolify.traefik.middlewares: "homelab-pbs-allowlist@file"
